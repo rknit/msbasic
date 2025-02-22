@@ -8,6 +8,7 @@ use std::{
 use tbo2::{
     cpu::CPU,
     mem::{RAM, ROM},
+    Layout, LayoutBuilder,
 };
 use termion::{
     input::{Keys, TermRead},
@@ -23,8 +24,7 @@ fn main() {
     let mut stdout = io::stdout().into_raw_mode().unwrap();
     let mut keys = termion::async_stdin().keys();
 
-    let mut cpu = CPU::new();
-    setup_mem(&mut cpu);
+    let mut cpu = CPU::new(create_layout_and_load_rom()).unwrap();
     cpu.reset();
 
     const CHR_IN: u16 = 0x5000;
@@ -99,8 +99,8 @@ fn get_char(keys: &mut Keys<AsyncReader>) -> Option<char> {
     })
 }
 
-fn setup_mem(cpu: &mut CPU) {
-    let mut rom = ROM::<0x8000>::new();
+fn create_layout_and_load_rom() -> Layout {
+    let mut rom = ROM::<0x8000>::default();
     let image = fs::read("tbo2.bin").expect("\r\ntemporary binary file\r\n");
     assert!(
         image.len() == 0x8000,
@@ -109,8 +109,15 @@ fn setup_mem(cpu: &mut CPU) {
     //let image = [0; 0x8000];
     rom.load_bytes(0, &image);
 
-    cpu.set_region(0x0000, 0x7FFF, Box::new(RAM::<0x8000>::new()));
-    cpu.set_region(0x8000, 0xFFFF, Box::new(rom));
+    let mut builder = LayoutBuilder::new(0x10000);
+    let ram_id = builder.add_memory(RAM::<0x8000>::default());
+    let rom_id = builder.add_memory(rom);
+
+    builder
+        .assign_range(0x0000, 0x8000, ram_id)
+        .assign_range(0x8000, 0x8000, rom_id);
+
+    builder.build().unwrap()
 }
 
 #[cfg(test)]
@@ -125,22 +132,25 @@ mod tests {
 
         const CLOCK_PERIOD_NANOS: u64 = 71;
 
-        let mut cpu = CPU::new();
-
         let image = fs::read("6502_65C02_functional_tests/ca65/6502_functional_test.bin")
             .expect("test binary file");
 
         let (ram_part, rom_part) = image.split_at(0x8000);
 
-        let mut ram = RAM::<0x8000>::new();
+        let mut ram = RAM::<0x8000>::default();
         ram.load_bytes(0, ram_part);
 
-        let mut rom = ROM::<0x8000>::new();
+        let mut rom = ROM::<0x8000>::default();
         rom.load_bytes(0, rom_part);
 
-        cpu.set_region(0x0000, 0x7FFF, Box::new(ram));
-        cpu.set_region(0x8000, 0xFFFF, Box::new(rom));
+        let mut builder = LayoutBuilder::new(0x10000);
+        let ram_id = builder.add_memory(ram);
+        let rom_id = builder.add_memory(rom);
+        builder
+            .assign_range(0x0000, 0x8000, ram_id)
+            .assign_range(0x8000, 0x8000, rom_id);
 
+        let mut cpu = CPU::new(builder.build().unwrap()).unwrap();
         cpu.reset();
         cpu.set_pc(0x400);
 
