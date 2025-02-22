@@ -27,8 +27,8 @@ to build the project, please refer to the requirements and instructions below.
   or run the executable found in the target directory.
 - Character `\` should be printed to the console.
   This means that you are now running Wozmon using TbO2 emulator.
-- Send the following message (after '>' is shown on the console) to start up [msbasic](https://github.com/mist64/msbasic).
-- To quit msbasic, use **CTRL+D** key combination.
+- Refer the snippet below to start up [msbasic](https://github.com/mist64/msbasic).
+- To quit the emulator, use **CTRL+D** key combination.
 
 ```Text
 \
@@ -47,3 +47,5 @@ OK
 ```
 
 Congrats! You are now in MS BASIC!
+You can copy the code in [hunt_the_wumpus.txt](./hunt_the_wumpus.txt),
+and paste it into msbasic console to run 'Hunt the Wumpus' game.
