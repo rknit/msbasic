@@ -28,6 +28,7 @@ to build the project, please refer to the requirements and instructions below.
 - Character `\` should be printed to the console.
   This means that you are now running Wozmon using TbO2 emulator.
 - Send the following message (after '>' is shown on the console) to start up [msbasic](https://github.com/mist64/msbasic).
+- To quit msbasic, use **CTRL+D** key combination.
 
 ```Text
 \

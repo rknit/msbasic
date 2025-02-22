@@ -1,0 +1,3 @@
+[submodule "TbO2"]
+	path = TbO2
+	url = https://github.com/rknit/TbO2.git

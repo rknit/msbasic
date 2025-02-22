@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 env_logger = "0.11.5"
-tbo2 = { path = "./tbo2" }
+tbo2 = { path = "./TbO2" }
 termion = "4.0.3"
 
 [dev-dependencies]
