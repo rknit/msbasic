@@ -4,23 +4,6 @@
 This project is inspired from [Ben Eater 6502 videos](https://www.youtube.com/watch?v=LnzuMJLZRdU&list=PLowKtXNTBypFbtuVMUVXNR0z1mu7dp7eH).
   You can run the project by referring to the [How to Run](#how-to-run) section.
 
-## How to Build
-
-  It should not be required to build the project yourself in order to run the project.
-You can refer to [How to Run](#how-to-run) section on how to run. If you still want
-to build the project, please refer to the requirements and instructions below.
-
-### Requirements
-
-- Unix system (or any system capable of running bash scripts).
-- ca65 & ld65 compiler.
-
-### Instructions
-
-- Run [./make.sh](./make.sh)
-  (You may need to allow execution for the script to work).
-- Run `cargo build` in the console.
-
 ## How to Run
 
 - Run the command ```cargo run --release``` in the console,
@@ -49,3 +32,20 @@ OK
 Congrats! You are now in MS BASIC!
 You can copy the code in [hunt_the_wumpus.txt](./hunt_the_wumpus.txt),
 and paste it into msbasic console to run 'Hunt the Wumpus' game.
+
+## How to Build
+
+  It should not be required to build the project yourself in order to run the project.
+You can refer to [How to Run](#how-to-run) section on how to run. If you still want
+to build the project, please refer to the requirements and instructions below.
+
+### Requirements
+
+- Unix system (or any system capable of running bash scripts).
+- ca65 & ld65 compiler.
+
+### Instructions
+
+- Run [./make.sh](./make.sh)
+  (You may need to allow execution for the script to work).
+- Run `cargo build` in the console.
