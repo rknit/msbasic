@@ -1,0 +1,12 @@
+[package]
+name = "tbo2_msbasic"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+env_logger = "0.11.5"
+tbo2 = { path = "./tbo2" }
+termion = "4.0.3"
+
+[dev-dependencies]
+env_logger = "0.11.5"
