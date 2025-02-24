@@ -5,11 +5,8 @@ use std::{
     time::{Duration, Instant},
 };
 
-use tbo2::{
-    cpu::CPU,
-    mem::{RAM, ROM},
-    Layout, LayoutBuilder,
-};
+use log::{log_enabled, trace, Level};
+use tbo2::{Layout, LayoutBuilder, CPU, RAM, ROM};
 use termion::{
     input::{Keys, TermRead},
     raw::{IntoRawMode, RawTerminal},
@@ -41,8 +38,8 @@ fn main() {
             if c == 0x4 as char {
                 break;
             }
-            if c == 'p' {
-                println!("{}\r", cpu.trace_exec());
+            if c == 'p' && log_enabled!(Level::Trace) {
+                trace!("{}\r", cpu.trace_exec());
             }
             inputs.push_back(c);
         }
@@ -110,8 +107,8 @@ fn create_layout_and_load_rom() -> Layout {
     rom.load_bytes(0, &image);
 
     let mut builder = LayoutBuilder::new(0x10000);
-    let ram_id = builder.add_memory(RAM::<0x8000>::default());
-    let rom_id = builder.add_memory(rom);
+    let ram_id = builder.add_device(RAM::<0x8000>::default());
+    let rom_id = builder.add_device(rom);
 
     builder
         .assign_range(0x0000, 0x8000, ram_id)
@@ -144,8 +141,8 @@ mod tests {
         rom.load_bytes(0, rom_part);
 
         let mut builder = LayoutBuilder::new(0x10000);
-        let ram_id = builder.add_memory(ram);
-        let rom_id = builder.add_memory(rom);
+        let ram_id = builder.add_device(ram);
+        let rom_id = builder.add_device(rom);
         builder
             .assign_range(0x0000, 0x8000, ram_id)
             .assign_range(0x8000, 0x8000, rom_id);
